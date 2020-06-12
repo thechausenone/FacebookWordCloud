@@ -8,11 +8,22 @@ from wordcloud import WordCloud, STOPWORDS # import wordcloud userful things
 
 class createWordCloud:
     def __init__(self, inputFileName, outputFileName):
-        self.stopwords = set(STOPWORDS) # Get stopwords as as set (no repeats)
+        self.stopwords = self.__setStopWords()
         self.masterString = self.__initialiseMasterString()
         self.messageContentFile = self.__openMessageContent(outputFileName)
         self.__populateMasterString()
         self.__generateWorldCloud(outputFileName)
+
+    def __setStopWords(self):
+        words = STOPWORDS
+        custom = []
+
+        # Source: https://www.ranks.nl/stopwords   
+        with open('./filtered_words.txt') as f:
+            custom = f.read().splitlines()
+        words.update(set(custom))
+
+        return words
 
     def __openMessageContent(self, messageContentFileName):
         # Open message content for reading
@@ -24,11 +35,12 @@ class createWordCloud:
         return ''
 
     def __populateMasterString(self):
-        # Go through every line in file and append line to master string 
+        # Go through every line in file and append line to master string
+        tempString = ""
         for line in self.messageContentFile:
-            self.masterString = self.masterString + ' ' + line
-        self.masterString = self.__reduceWhiteSpace(self.masterString)
-        # TODO: don't linke this wold want to be immutable
+            tempString = tempString + ' ' + line
+        tempString = self.__reduceWhiteSpace(tempString)
+        self.masterString = tempString.lower()
 
     def __reduceWhiteSpace(self, myString):
         # Fix to reduce white space
