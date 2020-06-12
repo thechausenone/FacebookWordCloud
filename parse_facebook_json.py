@@ -66,5 +66,4 @@ class parseFacebookJson:
             print('\rCount %i ' % (count), end='')
     
         # Export the  dataframe as csv (csv will be handy for analysis)
-        df.to_csv('messages.csv')
-
+        df.to_csv('./output/messages.csv')

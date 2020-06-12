@@ -52,7 +52,7 @@ def __checkFiles(inputFileName, outputFileName):
         sys.exit(1) 
     if(outputFileName == ""):
         print("Warning: output file not set. Default to output.png Set an output file using command line arg -o or --outputFile. Extension will be png by default")
-        outputFileName = "outputFile"
+        outputFileName = "./output/outputFile"
 
     print("Input file is: %s" % inputFileName)
     print("Output file is: %s" % outputFileName)    
