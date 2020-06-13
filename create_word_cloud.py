@@ -54,8 +54,10 @@ class createWordCloud:
                             width=1000, height=595, #pixels
                             mask=None,
                             max_words=1000,
-                            max_font_size=40, 
-                            random_state=42)
+                            max_font_size=150, 
+                            random_state=42,
+                            collocations=False)
+
         # Generate the wordcloud using the above parameters and the master string
         wc.generate(self.masterString)
 
@@ -66,3 +68,14 @@ class createWordCloud:
         plt.figure()
         fig.savefig(outputFileName, dpi=100,
                     papertype='a4', orientation='portrait')
+
+        # Generate word frequencies for analysis
+        self.__generateWordFreq(wc)
+
+    def __generateWordFreq(self, word_cloud):
+        with open('./output/analysis/word_freq.txt', 'w') as f:
+            descending_words = sorted(word_cloud.words_.items(), 
+                                    key=lambda x: x[1], 
+                                    reverse=True)
+            for i in descending_words:
+                f.write('{}: {}\n'.format(i[0], i[1]))
