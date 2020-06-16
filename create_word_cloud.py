@@ -3,7 +3,9 @@ Takes a txt and outputs a word cloud
 '''
 
 import matplotlib.pyplot as plt # Import matplotlib for rendering
-from wordcloud import WordCloud, STOPWORDS # import wordcloud userful things
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator # import wordcloud userful things
+import numpy as np
+from PIL import Image
 
 
 class createWordCloud:
@@ -48,13 +50,18 @@ class createWordCloud:
 
     def __generateWorldCloud(self, outputFileName):
         # Set wordcloud parameters
+        # Setup mask and colour
+        mask = np.array(Image.open("./assets/gradient_heart.jpg"))
+        image_colors = ImageColorGenerator(mask)
+
         # (trying to get suitable for A4 paper)
         wc = WordCloud(background_color='white',
                             stopwords=self.stopwords,
                             width=1000, height=595, #pixels
-                            mask=None,
+                            mask=mask,
                             max_words=1000,
-                            max_font_size=150, 
+                            max_font_size=160, 
+                            font_path='./assets/Pacifico-Regular.ttf',
                             random_state=42,
                             collocations=False)
 
@@ -63,14 +70,14 @@ class createWordCloud:
 
         # Set the size of the figure (again trying to get suitable for a4 paper)
         fig = plt.figure(figsize=(14, 9))
-        plt.imshow(wc, interpolation='bilinear')
+        plt.imshow(wc.recolor(color_func=image_colors), interpolation="bilinear")
         plt.axis('off')
         plt.figure()
         fig.savefig(outputFileName, dpi=100,
                     papertype='a4', orientation='portrait')
 
         # Generate word frequencies for analysis
-        self.__generateWordFreq(wc)
+        # self.__generateWordFreq(wc)
 
     def __generateWordFreq(self, word_cloud):
         with open('./output/analysis/word_freq.txt', 'w') as f:
