@@ -54,10 +54,9 @@ class createWordCloud:
         mask = np.array(Image.open("./assets/gradient_heart.jpg"))
         image_colors = ImageColorGenerator(mask)
 
-        # (trying to get suitable for A4 paper)
         wc = WordCloud(background_color='white',
                             stopwords=self.stopwords,
-                            width=1000, height=595, #pixels
+                            # width=1000, height=595, #pixels
                             mask=mask,
                             max_words=1000,
                             max_font_size=160, 
@@ -68,16 +67,17 @@ class createWordCloud:
         # Generate the wordcloud using the above parameters and the master string
         wc.generate(self.masterString)
 
-        # Set the size of the figure (again trying to get suitable for a4 paper)
-        fig = plt.figure(figsize=(14, 9))
+        # Set the size of the figure (suitable for 18" x 12" print)
+        fig = plt.figure(figsize=(18, 12))
         plt.imshow(wc.recolor(color_func=image_colors), interpolation="bilinear")
         plt.axis('off')
         plt.figure()
-        fig.savefig(outputFileName, dpi=100,
-                    papertype='a4', orientation='portrait')
+        fig.savefig(outputFileName, 
+                    dpi=300,
+                    orientation='landscape')
 
         # Generate word frequencies for analysis
-        # self.__generateWordFreq(wc)
+        self.__generateWordFreq(wc)
 
     def __generateWordFreq(self, word_cloud):
         with open('./output/analysis/word_freq.txt', 'w') as f:
